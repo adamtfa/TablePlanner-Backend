@@ -1,4 +1,4 @@
-# 🍽️ Restaurant Table Planner
+# 🍽️ Restaurant Table Planner (Backend)
 
 A web application for restaurants to manage table reservations.
 

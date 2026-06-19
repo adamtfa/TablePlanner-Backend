@@ -24,7 +24,15 @@ public class TableService {
         return repo.save(table);
     }
 
-    public void deleteAll() {
-        repo.deleteAll();
+    public RestaurantTable update(Long id, RestaurantTable updatedTable) {
+        RestaurantTable existing = repo.findById(id).orElseThrow(RuntimeException::new);
+        existing.setTableNumber(updatedTable.getTableNumber());
+        existing.setCapacity(updatedTable.getCapacity());
+        existing.setAvailable(updatedTable.isAvailable());
+        return repo.save(existing);
+    }
+
+    public void deleteById(Long id) {
+        repo.deleteById(id);
     }
 }

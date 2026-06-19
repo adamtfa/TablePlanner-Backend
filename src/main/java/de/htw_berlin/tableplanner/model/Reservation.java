@@ -18,6 +18,7 @@ public class Reservation {
     private LocalDate date;
     private LocalTime time;
     private int numberOfGuests;
+
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;

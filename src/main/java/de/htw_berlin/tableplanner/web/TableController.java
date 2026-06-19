@@ -1,9 +1,9 @@
 package de.htw_berlin.tableplanner.web;
 
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.*;
-import de.htw_berlin.tableplanner.service.TableService;
 import de.htw_berlin.tableplanner.model.RestaurantTable;
+import de.htw_berlin.tableplanner.service.TableService;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,8 +27,13 @@ public class TableController {
         return service.save(table);
     }
 
-    @DeleteMapping("/tables")
-    public void deleteAll() {
-        service.deleteAll();
+    @PutMapping("/tables/{id}")
+    public RestaurantTable updateTable(@PathVariable Long id, @RequestBody RestaurantTable table) {
+        return service.update(id, table);
+    }
+
+    @DeleteMapping("/tables/{id}")
+    public void deleteById(@PathVariable Long id) {
+        service.deleteById(id);
     }
 }

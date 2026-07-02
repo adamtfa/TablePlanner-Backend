@@ -20,11 +20,9 @@ public class Reservation {
     private int numberOfGuests;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
     private Customer customer;
 
     @ManyToOne
-    @JoinColumn(name = "table_id")
     private RestaurantTable table;
 
     @Id

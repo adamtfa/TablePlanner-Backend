@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-class TableServiceTest {
+class TableUpdatingTest {
 
     @Autowired
     private TableService service;

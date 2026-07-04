@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +21,8 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class TableAvailabilityTest {
+
+    private static final ZoneId RESTAURANT_ZONE = ZoneId.of("Europe/Berlin");
 
     @Autowired
     private TableService service;
@@ -36,7 +39,7 @@ class TableAvailabilityTest {
         RestaurantTable table = new RestaurantTable();
         table.setId(1L);
 
-        LocalDateTime start = LocalDateTime.now().minusMinutes(30);
+        LocalDateTime start = LocalDateTime.now(RESTAURANT_ZONE).minusMinutes(30);
         Reservation reservation = new Reservation();
         reservation.setDate(start.toLocalDate());
         reservation.setTime(start.toLocalTime());
@@ -55,7 +58,7 @@ class TableAvailabilityTest {
         RestaurantTable table = new RestaurantTable();
         table.setId(1L);
 
-        LocalDateTime start = LocalDateTime.now().minusMinutes(200);
+        LocalDateTime start = LocalDateTime.now(RESTAURANT_ZONE).minusMinutes(200);
         Reservation reservation = new Reservation();
         reservation.setDate(start.toLocalDate());
         reservation.setTime(start.toLocalTime());
@@ -74,7 +77,7 @@ class TableAvailabilityTest {
         RestaurantTable table = new RestaurantTable();
         table.setId(1L);
 
-        LocalDateTime start = LocalDateTime.now().plusMinutes(60);
+        LocalDateTime start = LocalDateTime.now(RESTAURANT_ZONE).plusMinutes(60);
         Reservation reservation = new Reservation();
         reservation.setDate(start.toLocalDate());
         reservation.setTime(start.toLocalTime());

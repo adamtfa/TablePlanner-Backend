@@ -19,10 +19,10 @@ public class Reservation {
     private LocalTime time;
     private int numberOfGuests;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Customer customer;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private RestaurantTable table;
 
     @Id

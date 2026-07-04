@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
         log.warn("Data integrity violation: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(new ErrorResponse("This entity cannot be deleted because it is still referenced elsewhere."));
+                .body(new ErrorResponse("This entity cannot be deleted because it is still being used in a reservation."));
     }
 
     @ExceptionHandler(Exception.class)

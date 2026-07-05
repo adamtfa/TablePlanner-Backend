@@ -1,4 +1,8 @@
-# 🍽️ TablePlanner — Backend
+<p align="center">
+  <img src="tableplanner_logo.png" alt="TablePlanner logo" width="90" />
+</p>
+
+<h1 align="center">TablePlanner — Backend</h1>
 
 The backend for **TablePlanner**, a web application that lets restaurants manage
 their tables, guests, and reservations. This repository contains the REST API,

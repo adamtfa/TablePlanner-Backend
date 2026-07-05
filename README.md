@@ -42,10 +42,6 @@ Each restaurant has its own account and manages its own isolated set of data:
   `404` for not-found, `409` for integrity violations, `500` as fallback
 - **Docker** for deployment on **Render**
 
-Table availability is **not stored** but computed on the fly: a table counts as
-unavailable while the current time (in `Europe/Berlin`) falls within a
-reservation's 120-minute window.
-
 ## Developer Team
 - Nando Patton
 - Adam Tuffaha

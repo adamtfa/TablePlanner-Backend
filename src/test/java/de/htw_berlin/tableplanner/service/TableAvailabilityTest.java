@@ -1,9 +1,12 @@
 package de.htw_berlin.tableplanner.service;
 
 import de.htw_berlin.tableplanner.model.Reservation;
+import de.htw_berlin.tableplanner.model.Restaurant;
 import de.htw_berlin.tableplanner.model.RestaurantTable;
 import de.htw_berlin.tableplanner.repository.ReservationRepository;
 import de.htw_berlin.tableplanner.repository.RestaurantTableRepository;
+import de.htw_berlin.tableplanner.security.CurrentRestaurant;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,11 +36,27 @@ class TableAvailabilityTest {
     @MockitoBean
     private ReservationRepository reservationRepo;
 
+    @MockitoBean
+    private CurrentRestaurant currentRestaurant;
+
+    @BeforeEach
+    void setUp() {
+        when(currentRestaurant.getId()).thenReturn(1L);
+    }
+
+    private RestaurantTable tableOwnedByCurrentRestaurant() {
+        Restaurant restaurant = new Restaurant();
+        restaurant.setId(1L);
+        RestaurantTable table = new RestaurantTable();
+        table.setId(1L);
+        table.setRestaurant(restaurant);
+        return table;
+    }
+
     @Test
     @DisplayName("getById() should mark table unavailable during an active reservation")
     void getById_duringActiveReservation() {
-        RestaurantTable table = new RestaurantTable();
-        table.setId(1L);
+        RestaurantTable table = tableOwnedByCurrentRestaurant();
 
         LocalDateTime start = LocalDateTime.now(RESTAURANT_ZONE).minusMinutes(30);
         Reservation reservation = new Reservation();
@@ -55,8 +74,7 @@ class TableAvailabilityTest {
     @Test
     @DisplayName("getById() should mark table available after reservation window has passed")
     void getById_afterReservationEnded() {
-        RestaurantTable table = new RestaurantTable();
-        table.setId(1L);
+        RestaurantTable table = tableOwnedByCurrentRestaurant();
 
         LocalDateTime start = LocalDateTime.now(RESTAURANT_ZONE).minusMinutes(200);
         Reservation reservation = new Reservation();
@@ -74,8 +92,7 @@ class TableAvailabilityTest {
     @Test
     @DisplayName("getById() should mark table available before reservation starts")
     void getById_beforeReservationStarts() {
-        RestaurantTable table = new RestaurantTable();
-        table.setId(1L);
+        RestaurantTable table = tableOwnedByCurrentRestaurant();
 
         LocalDateTime start = LocalDateTime.now(RESTAURANT_ZONE).plusMinutes(60);
         Reservation reservation = new Reservation();

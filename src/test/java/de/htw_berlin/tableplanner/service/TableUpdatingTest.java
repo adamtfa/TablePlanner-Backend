@@ -1,7 +1,10 @@
 package de.htw_berlin.tableplanner.service;
 
+import de.htw_berlin.tableplanner.model.Restaurant;
 import de.htw_berlin.tableplanner.model.RestaurantTable;
 import de.htw_berlin.tableplanner.repository.RestaurantTableRepository;
+import de.htw_berlin.tableplanner.security.CurrentRestaurant;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +25,23 @@ class TableUpdatingTest {
     @MockitoBean
     private RestaurantTableRepository tableRepo;
 
+    @MockitoBean
+    private CurrentRestaurant currentRestaurant;
+
+    @BeforeEach
+    void setUp() {
+        when(currentRestaurant.getId()).thenReturn(1L);
+    }
+
     @Test
     @DisplayName("update() should update fields when table exists")
     void updateTable_withValidId() {
+        Restaurant restaurant = new Restaurant();
+        restaurant.setId(1L);
+
         RestaurantTable existingTable = new RestaurantTable();
         existingTable.setId(1L);
+        existingTable.setRestaurant(restaurant);
 
         RestaurantTable updatedData = new RestaurantTable();
         updatedData.setTableNumber(9);

@@ -1,8 +1,10 @@
 package de.htw_berlin.tableplanner.web;
 
-import lombok.AllArgsConstructor;
 import de.htw_berlin.tableplanner.model.Customer;
 import de.htw_berlin.tableplanner.service.CustomerService;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,27 +15,29 @@ public class CustomerController {
     private final CustomerService service;
 
     @GetMapping("/customers")
-    public List<Customer> getAllCustomers() {
-        return service.getAll();
+    public ResponseEntity<List<Customer>> getAllCustomers() {
+        return ResponseEntity.ok(service.getAll());
     }
 
     @GetMapping("/customers/{id}")
-    public Customer getCustomerById(@PathVariable Long id) {
-        return service.getById(id);
+    public ResponseEntity<Customer> getCustomerById(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getById(id));
     }
 
     @PostMapping("/customers")
-    public Customer createCustomer(@RequestBody Customer customer) {
-        return service.save(customer);
+    public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) {
+        Customer created = service.save(customer);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @PutMapping("/customers/{id}")
-    public Customer updateCustomer(@PathVariable Long id, @RequestBody Customer customer) {
-        return service.update(id, customer);
+    public ResponseEntity<Customer> updateCustomer(@PathVariable Long id, @RequestBody Customer customer) {
+        return ResponseEntity.ok(service.update(id, customer));
     }
 
     @DeleteMapping("/customers/{id}")
-    public void deleteCustomerById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteCustomerById(@PathVariable Long id) {
         service.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }

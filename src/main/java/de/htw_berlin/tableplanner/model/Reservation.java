@@ -1,5 +1,6 @@
 package de.htw_berlin.tableplanner.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,6 +25,10 @@ public class Reservation {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private RestaurantTable table;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Restaurant restaurant;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

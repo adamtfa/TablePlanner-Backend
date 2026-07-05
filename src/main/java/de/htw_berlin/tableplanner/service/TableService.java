@@ -3,7 +3,9 @@ package de.htw_berlin.tableplanner.service;
 import de.htw_berlin.tableplanner.exception.ResourceNotFoundException;
 import de.htw_berlin.tableplanner.model.RestaurantTable;
 import de.htw_berlin.tableplanner.repository.ReservationRepository;
+import de.htw_berlin.tableplanner.repository.RestaurantRepository;
 import de.htw_berlin.tableplanner.repository.RestaurantTableRepository;
+import de.htw_berlin.tableplanner.security.CurrentRestaurant;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,27 +23,32 @@ public class TableService {
 
     private final RestaurantTableRepository repo;
     private final ReservationRepository reservationRepo;
+    private final RestaurantRepository restaurantRepo;
+    private final CurrentRestaurant currentRestaurant;
 
     public List<RestaurantTable> getAll() {
-        List<RestaurantTable> tables = repo.findAll();
+        List<RestaurantTable> tables = repo.findByRestaurant_Id(currentRestaurant.getId());
         tables.forEach(this::applyCurrentAvailability);
         return tables;
     }
 
     public RestaurantTable getById(Long id) {
         RestaurantTable table = repo.findById(id)
+                .filter(this::belongsToCurrentRestaurant)
                 .orElseThrow(() -> new ResourceNotFoundException("Table not found with id " + id));
         applyCurrentAvailability(table);
         return table;
     }
 
     public RestaurantTable save(RestaurantTable table) {
+        table.setRestaurant(restaurantRepo.getReferenceById(currentRestaurant.getId()));
         log.info("Creating table number {}", table.getTableNumber());
         return repo.save(table);
     }
 
     public RestaurantTable update(Long id, RestaurantTable updatedTable) {
         RestaurantTable existing = repo.findById(id)
+                .filter(this::belongsToCurrentRestaurant)
                 .orElseThrow(() -> new ResourceNotFoundException("Table not found with id " + id));
         existing.setTableNumber(updatedTable.getTableNumber());
         existing.setCapacity(updatedTable.getCapacity());
@@ -52,8 +59,16 @@ public class TableService {
     }
 
     public void deleteById(Long id) {
+        RestaurantTable existing = repo.findById(id)
+                .filter(this::belongsToCurrentRestaurant)
+                .orElseThrow(() -> new ResourceNotFoundException("Table not found with id " + id));
         log.info("Deleting table {}", id);
-        repo.deleteById(id);
+        repo.deleteById(existing.getId());
+    }
+
+    private boolean belongsToCurrentRestaurant(RestaurantTable table) {
+        return table.getRestaurant() != null
+                && table.getRestaurant().getId().equals(currentRestaurant.getId());
     }
 
     private void applyCurrentAvailability(RestaurantTable table) {

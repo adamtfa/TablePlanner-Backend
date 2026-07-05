@@ -2,10 +2,13 @@ package de.htw_berlin.tableplanner.service;
 
 import de.htw_berlin.tableplanner.model.Customer;
 import de.htw_berlin.tableplanner.model.Reservation;
+import de.htw_berlin.tableplanner.model.Restaurant;
 import de.htw_berlin.tableplanner.model.RestaurantTable;
 import de.htw_berlin.tableplanner.repository.CustomerRepository;
 import de.htw_berlin.tableplanner.repository.ReservationRepository;
 import de.htw_berlin.tableplanner.repository.RestaurantTableRepository;
+import de.htw_berlin.tableplanner.security.CurrentRestaurant;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +35,19 @@ class ReservationServiceTest {
     private CustomerRepository customerRepo;
     @MockitoBean
     private RestaurantTableRepository tableRepo;
+    @MockitoBean
+    private CurrentRestaurant currentRestaurant;
+
+    @BeforeEach
+    void setUp() {
+        when(currentRestaurant.getId()).thenReturn(1L);
+    }
+
+    private Restaurant ownRestaurant() {
+        Restaurant restaurant = new Restaurant();
+        restaurant.setId(1L);
+        return restaurant;
+    }
 
     @Test
     @DisplayName("should set customer and table when both IDs are valid")
@@ -39,10 +55,12 @@ class ReservationServiceTest {
         Customer testCustomer = new Customer();
         testCustomer.setId(1L);
         testCustomer.setFirstName("Adam");
+        testCustomer.setRestaurant(ownRestaurant());
 
         RestaurantTable testTable = new RestaurantTable();
         testTable.setId(1L);
         testTable.setTableNumber(7);
+        testTable.setRestaurant(ownRestaurant());
 
         Reservation newReservation = new Reservation();
         newReservation.setDate(LocalDate.of(2026, 7, 2));
@@ -72,14 +90,17 @@ class ReservationServiceTest {
     void updateReservation_withValidIds() {
         Reservation existingReservation = new Reservation();
         existingReservation.setId(1L);
+        existingReservation.setRestaurant(ownRestaurant());
 
         Customer testCustomer = new Customer();
         testCustomer.setId(1L);
         testCustomer.setFirstName("Nando");
+        testCustomer.setRestaurant(ownRestaurant());
 
         RestaurantTable testTable = new RestaurantTable();
         testTable.setId(1L);
         testTable.setTableNumber(3);
+        testTable.setRestaurant(ownRestaurant());
 
         Reservation updatedData = new Reservation();
         updatedData.setDate(LocalDate.of(2026, 8, 15));

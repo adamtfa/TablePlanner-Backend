@@ -8,7 +8,7 @@ The backend for **TablePlanner**, a web application that lets restaurants manage
 their tables, guests, and reservations. This repository contains the REST API,
 the database layer, and the authentication logic.
 
-URL: https://tableplanner-frontend.onrender.com/login
+URL: https://tableplanner-frontend.onrender.com
 (Test) Credentials: Test/12345678
 
 The matching frontend lives in [TablePlanner-Frontend](https://github.com/adamtfa/TablePlanner-Frontend).

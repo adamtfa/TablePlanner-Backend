@@ -11,6 +11,8 @@ the database layer, and the authentication logic.
 URL: https://tableplanner-frontend.onrender.com
 (Test) Credentials: Test/12345678
 
+**Please note that the first request might take 2-3 minutes to load up the backend.**
+
 The matching frontend lives in [TablePlanner-Frontend](https://github.com/adamtfa/TablePlanner-Frontend).
 
 ## What the app can do
